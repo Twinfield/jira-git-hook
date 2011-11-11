@@ -37,7 +37,7 @@ From the root of your repository, run these commands:
 
     git config jira.login <your Jira login>
     git config jira.password <your Jira password>
-
+    git config jira.url <your Jira IP>
 
 ## Test
 
