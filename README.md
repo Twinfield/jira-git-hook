@@ -34,10 +34,10 @@ Rename gitjira.js into commit-msg and put it into .git/hooks folder inside of yo
 ### Configuration
 
 From the root of your repository, run these commands:
-```sh
-git config jira.login <your Jira login>
-git config jira.password <your Jira password>
-```
+
+    git config jira.login <your Jira login>
+    git config jira.password <your Jira password>
+
 
 ## Test
 
