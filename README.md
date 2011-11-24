@@ -21,7 +21,7 @@ After grabbing binary file you should make it available in PATH (either put node
 
 You should already have cloned repository on your computer. Follow Git/GitHub instructions how to do that
 
-### JiraGitHook screipt
+### JiraGitHook script
 
 Fetch lastest version if hook script from [[http://github.com/olostan/jira-git-hook/raw/master/gitjira.js]]
 
