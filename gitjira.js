@@ -9,6 +9,10 @@ if (scriptname === 'gitjira.js') {
     scriptname = path.dirname(process.argv[1]).split("/").slice(-1)+"";
 }
 
+if (process.argv[2] == 'test') {
+    scriptname = 'test';
+}
+
 switch (scriptname) {
    case 'commit-msg':
       commit_msg();
@@ -18,6 +22,9 @@ switch (scriptname) {
    break;
    case 'update':
       update();
+   break;
+   case 'test': 
+      dotest();
    break;
    default:	
       log("Script was called in incorrect way - should be or commit-msg or pre-receive, but was called as '" + scriptname + "'\n");
@@ -53,19 +60,20 @@ function get_jira_config(callback) {
 }
 
 function check_issue(issue, callback) {
-   var http = require('http');
+   var https = require('https');
    get_jira_config(function(username, password, jiraUrl) {
-      var auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
-      var header = {'Host': jiraUrl, 'Authorization': auth};
-      var jira = http.createClient(80, jiraUrl);
-      var request = jira.request('GET', '/rest/api/2.0.alpha1/issue/' + issue, header);
-      request.end();
-      request.on('response', function(res){ 
+	jiraUrl += '/rest/api/latest/issue/' + issue;	
+	var options = require('url').parse(jiraUrl);
+      var request = https.request(options,
+       function(res){ 
          var data = '';
          res.setEncoding('utf8');
          res.on('data', function (chunk) {
            data += chunk;
          }); 
+	 res.on('error', function(e) {
+		log("Problem with request: "+e.message);
+	 });
          res.on('end', function() {			
             var obj;
             try {
@@ -81,6 +89,9 @@ function check_issue(issue, callback) {
                   }
                   process.exit(1);
                }
+	       var inspect = require('util').inspect;
+		log(inspect(err));
+		log(inspect(data));
                return callback(null);
             }
             if (obj.errorMessages && obj.errorMessages.length > 0) {
@@ -91,13 +102,14 @@ function check_issue(issue, callback) {
             }
             else {
                callback({
-                  status:obj.fields.status.value.name, 
-                  assignee: obj.fields.assignee.value.name,
-                  type: obj.fields.issuetype.value.name
+                  status:obj.fields.status?obj.fields.status.name:"", 
+                  assignee: obj.fields.assignee?obj.fields.assignee.name:"",
+                  type: obj.fields.issuetype?obj.fields.issuetype.name:""
                });
             }
          });
       });
+      request.end();
    });
 }
 
@@ -185,4 +197,16 @@ function get_comment(ref, callback) {
       var lines = stdout.split('\n\n');
       callback(null, ref, stdout.substr(stdout.indexOf('\n\n') + 2));
    });
+}
+
+function dotest() {
+  var issue = process.argv[3];
+  if (!issue) {
+	log("To test jira hook please provide JIRA issue number");
+	process.exit(1);
+  } 
+  check_issue(issue, function (data) {
+	log("Result: ");	
+	log(require('util').inspect(data));
+  });
 }
