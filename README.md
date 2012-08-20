@@ -13,9 +13,8 @@ Issues should be mentioned in any place of comment in the square braces. For exa
 ## Pre-requisites 
 
 ### Node.JS
-As hook is written in Node.JS, you need to get binary file 'node.exe' from [[http://nodejs.org/dist/]] (it should work on any version, but in case of errors you can try any from this range 0.5.1 - 0.5.7)
-
-After grabbing binary file you should make it available in PATH (either put node.exe to some folder that is already added into PATH, or add new entry in PATH with folder where you've put node.exe)
+As hook is written in Node.JS, you need to install it. You can get installation package from [[http://nodejs.org/dist/]]
+(it should work on any version, but in case of errors you can try any from this range 0.5.1 - 0.5.7)
 
 ### Clone repository
 
@@ -33,11 +32,11 @@ Rename gitjira.js into commit-msg and put it into .git/hooks folder inside of yo
 
 ### Configuration
 
-From the root of your repository, run these commands:
+From the root of your repository, run this commands:
+    
+    git config jira.url <your Jira URL>
 
-    git config jira.login <your Jira login>
-    git config jira.password <your Jira password>
-    git config jira.url <your Jira IP>
+You need to put your JIRA login/password into URL. Example: `https://mylogin:mypassword@mycompany.atlassian.net/`
 
 ## Test
 
