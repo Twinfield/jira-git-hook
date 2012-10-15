@@ -36,7 +36,9 @@ From the root of your repository, run this commands:
     
     git config jira.url <your Jira URL>
 
-You need to put your JIRA login/password into URL. Example: `https://mylogin:mypassword@mycompany.atlassian.net/`
+You need to put your JIRA login/password into URL. Example: `https://mylogin:mypassword@mycompany.atlassian.net` 
+
+NOTE: Do not include ending slash into URL.
 
 ## Test
 
